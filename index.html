@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalnia+Glaze:wght@100..700&family=Edu+VIC+WA+NT+Beginner:wght@400..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+    background-image: url(sunset-7490522.jpg);
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(5px);
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    margin: 0;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.message {
+    font-family: "Kalnia Glaze", serif;
+    font-optical-sizing: auto;
+    font-variation-settings: "wdth" 100;
+    font-size: 5rem;
+    color: white;
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: all 1s ease-in-out;
+}
+
+.message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.message.shrink {
+    font-size: 2.5rem;
+    transform: translateY(-100px);
+}
+
+.box {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    height: 350px;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.4px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.box.active {
+    opacity: 1;
+}
+
+.box-indicator {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.box-indicator.show {
+    opacity: 1;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background: grey;
+}
+
+.indicator.active {
+    background: white;
+}
+
+.line {
+    position: absolute;
+    background: white;
+    transition: all 0.5s ease-in-out;
+}
+
+.line.horizontal {
+    height: 5px;
+    width: 0;
+    top: 0;
+    left: 0;
+}
+
+.line.vertical {
+    width: 5px;
+    height: 0;
+    top: 0;
+    left: 0;
+}
+
+.box-filled {
+    background: linear-gradient(to right, #ffafbd, #ffc3a0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.box-filled.active {
+    opacity: 1;
+}
+
+#box-content {
+    font-family: "Edu VIC WA NT Beginner", cursive;
+    font-size: 2rem;
+    color: #000000;
+    padding: 0 30px;
+    text-align: center;
+    line-height: 1.5;
+    z-index: 10;
+    position: relative;
+}
+
+@media (max-width: 640px) {
+    .message {
+        font-size: 3rem;
+    }
+
+    .box {
+        height: 250px;
+    }
+
+    #box-content {
+        font-size: 1.5rem;
+        padding: 0 20px;
+    }
+}
+
+/* Heart animation inside the box */
+.heart {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    animation: heart-float 5s infinite;
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25px;
+    height: 40px;
+    background-color: rgba(255, 192, 203, 0.7);
+    border-radius: 50px 50px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+.heart::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+@keyframes heart-float {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-50px) scale(1.2);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.download-btn {
+    margin-top: 20px; /* Add some spacing above the button */
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.download-btn:hover {
+    background-color: #ff1493;
+}
+
+    </style>
+</head>
+<body>
+    <div class="text-container">
+        <h1 id="message" class="message"></h1>
+        <div id="box" class="box hidden">
+            <div class="line horizontal"></div>
+            <div class="line vertical"></div>
+            <div class="box-filled">
+                <!-- Hearts -->
+                <div class="heart" style="left: 20%; animation-delay: 0s;"></div>
+                <div class="heart" style="left: 50%; animation-delay: 2s;"></div>
+                <div class="heart" style="left: 80%; animation-delay: 4s;"></div>
+                <div class="heart" style="right: 30%; animation-delay: 1s;"></div>
+                <div class="heart" style="right: 90%; animation-delay: 4s;"></div>
+            </div>
+            <div id="box-content" class="text-black text-2xl font-semibold"></div>
+        </div>
+        <div class="box-indicator" id="box-indicator">
+            <div class="indicator active"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+        </div>
+        <button id="download-btn" class="download-btn">Surprise Here!!</button>
+    </div>
+
+    <!-- Include confetti.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
+    <script>
+        function writeMessage(message, element, speed, callback) {
+            let index = 0;
+            element.classList.add('show');
+    
+            const interval = setInterval(() => {
+                if (index < message.length) {
+                    element.textContent += message[index];
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    callback();
+                }
+            }, speed);
+        }
+    
+        function createBoxAnimation() {
+            const box = document.getElementById('box');
+            const horizontalLine = box.querySelector('.line.horizontal');
+            const verticalLine = box.querySelector('.line.vertical');
+            const filledBox = box.querySelector('.box-filled');
+            const boxIndicator = document.getElementById('box-indicator');
+    
+            box.classList.remove('hidden');
+    
+            setTimeout(() => {
+                horizontalLine.style.width = '100%';
+            }, 100);
+    
+            setTimeout(() => {
+                verticalLine.style.height = '100%';
+            }, 500);
+    
+            setTimeout(() => {
+                filledBox.classList.add('active');
+                box.classList.add('active');
+                boxIndicator.classList.add('show');
+                changeBoxContent();
+            }, 1000);
+        }
+    
+        function changeBoxContent() {
+            const boxContent = document.getElementById('box-content');
+            const indicators = document.querySelectorAll('.indicator');
+            const contentArray = [
+                "Many many happy returns of the day! 🥳🥳 Party to lunga tumse jb milunga tb.",
+
+                "Ab m to aa paunga nhi tumko wish krne samne face to face, to socha kuch aisa kr du ki atleast thode time k liye hi shi but tumhare yaadon m to aa jau.",
+
+                "Although not super cool or flashy or anything, but haan agar chaho to isko mere taraf se ek chhota sa gift smjh lo",
+
+                "Mujhe honestly lga tha ki tumhara birthday September m h to mein socha mere paas enough time rhega m shi se sb seekh k tumko ye bilkul perfect bna k dunga but kitna bewakoof hun n yrr m?",
+
+                "I just honestly wanted you to know how special you're to me, how much you value to me. I wanted to make you feel how special you're to me and how much value you hold in my life.",
+
+                "Please n mujhe chhod k mt jana na kabhi baat krna band krna, I'd be devastated. Already I am anxious kyuki tum reply nhi krti ab, we don't like we once used to and I don't know for how long this will go and this uncertainity just makes me even more anxious and paranoid, what if you're planning on leave me?"
+
+            ];
+    
+            let currentIndex = 0;
+    
+            // Write the first paragraph letter by letter
+            writeMessage(contentArray[currentIndex], boxContent, 100, () => {
+                // Show Valentine's Day confetti inside the box
+                showValentinesConfetti();
+                currentIndex++;
+                // Delay after the first paragraph to show the next content
+                const interval = setInterval(() => {
+                    if (currentIndex < contentArray.length) {
+                        // Clear previous content
+                        boxContent.textContent = '';
+    
+                        // Create a new paragraph element for each new content
+                        const p = document.createElement('p');
+                        p.textContent = contentArray[currentIndex];
+                        boxContent.appendChild(p);
+    
+                        // Update indicator
+                        indicators.forEach((indicator, index) => {
+                            if (index === currentIndex) {
+                                indicator.classList.add('active');
+                            } else {
+                                indicator.classList.remove('active');
+                            }
+                        });
+    
+                        // Show heart confetti inside the box
+                        showHeartConfetti();
+    
+                        currentIndex++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 6500); // Adjust this value to control the time between paragraphs
+            });
+        }
+    
+        function showValentinesConfetti() {
+            const box = document.getElementById('box');
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 50,
+                    origin: { y: 0.6 },
+                    colors: ['#ff69b4', '#ff1493', '#ff6ec7'],
+                    shapes: ['square', 'circle'],
+                    gravity: 0.5,
+                    scalar: 1.2,
+                    container: box // Confetti inside the box
+                });
+            }, 500); // Confetti lasts for around 1.5-2 seconds
+        }
+    
+        function showHeartConfetti() {
+            const box = document.getElementById('box');
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff69b4', '#ff1493'],
+                    shapes: ['heart'],
+                    gravity: 0.7,
+                    scalar: 0.9,
+                    container: box // Confetti inside the box
+                });
+            }, 500);
+        }
+    
+        function triggerFireworks() {
+            const duration = 7 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    
+            function randomInRange(min, max) {
+                return Math.random() * (min - max) + min;
+            }
+    
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+    
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+    
+                const particleCount = 50 * (timeLeft / duration);
+    
+                confetti(
+                    Object.assign({}, defaults, {
+                        particleCount,
+                        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    })
+                );
+                confetti(
+                    Object.assign({}, defaults, {
+                        particleCount,
+                        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    })
+                );
+            }, 250);
+        }
+    
+        function triggerSchoolPride() {
+            const end = Date.now() + 6 * 1000;
+            const colors = ["#bb0000", "#ffffff"];
+    
+            (function frame() {
+                confetti({
+                    particleCount: 2,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors,
+                });
+    
+                confetti({
+                    particleCount: 2,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors,
+                });
+    
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageText = "Happy Birthday, Avika!!";
+            const messageElement = document.getElementById('message');
+    
+            triggerFireworks();
+            triggerSchoolPride();
+    
+            writeMessage(messageText, messageElement, 100, () => {
+                // Animate the message to shrink and show the box
+                messageElement.classList.add('shrink');
+                setTimeout(() => {
+                    createBoxAnimation();
+                }, 1000);
+            });
+        });
+        // Download button functionality
+
+        document.getElementById('download-btn').addEventListener('click', function() {
+            const a = document.createElement('a');
+            a.href = 'path_to_your_proposal_animation.mp4'; // Update with the actual path to your animation file
+            a.download = 'Surprise.mp4'; // This will be the file name for the download
+            a.click();
+        });
+        // Check if the user has visited before
+        const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // Function to show the button
+        function showButton() {
+            downloadBtn.style.opacity = '1';
+            downloadBtn.style.pointerEvents = 'auto';
+        }
+
+        // If the user has visited before, show the button immediately
+        if (hasVisitedBefore) {
+            showButton();
+        } else {
+            // Otherwise, wait until the last paragraph is loaded
+            downloadBtn.style.opacity = '0';
+            downloadBtn.style.pointerEvents = 'none';
+
+            // Function to track the loading of paragraphs
+            function handleParagraphLoad() {
+                const lastParagraph = document.querySelector('.box-indicator .indicator:last-child');
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.target.classList.contains('active')) {
+                            // Show the button when the last paragraph indicator is active
+                            showButton();
+                            // Set the visit flag in localStorage
+                            localStorage.setItem('hasVisitedBefore', 'true');
+                            // Stop observing
+                            observer.disconnect();
+                        }
+                    });
+                });
+
+                observer.observe(lastParagraph, { attributes: true });
+            }
+
+            // Call the function when the page loads
+            window.onload = handleParagraphLoad;
+        }
+
+
+    </script>
+</body>
+</html>

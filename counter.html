@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/PButcher/flipdown@latest/dist/flipdown.css">
+    <style>
+        body {
+            background-color: black;
+            color: rgb(245, 245, 245);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling during transition */
+            transition: opacity 1s ease-in-out; /* Smooth transition for fade-out */
+        }
+
+        .flipdown {
+            font-size: 3rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .flipdown .flipdown__item {
+            margin: 0 10px;
+        }
+
+        @media (max-width: 767px) {
+            .flipdown {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="flipdown" class="flipdown"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/PButcher/flipdown@latest/dist/flipdown.js"></script>
+    <script>
+        // Set the countdown date
+        const countdownDate = new Date("August 22, 2024 00:00:00").getTime();
+
+        // Create a new Flipdown instance
+        const flipdown = new FlipDown(countdownDate / 1000)
+            .start()
+            .ifEnded(() => {
+                // Add a class to body for fade-out effect
+                document.body.classList.add('fade-out');
+                // Redirect to index.html after a slight delay to allow fade-out
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000); // Delay should match the transition duration
+            });
+    </script>
+</body>
+</html>
