@@ -227,12 +227,14 @@
       gtag('config', 'G-9ZL4S57BSK');
     </script>
 
-    <!-- EmailJS -->
+    <!-- Include EmailJS library -->
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-        (function(){
-            emailjs.init("ABNRH9A251JC1pxei"); // Replace with your EmailJS Public API Key
+        (function() {
+            emailjs.init("YOUR_PUBLIC_API_KEY"); // Replace with your EmailJS Public API Key
         })();
+    </script>
+    <script>
 
         function getBrowserAndDeviceInfo() {
             const browserInfo = {
