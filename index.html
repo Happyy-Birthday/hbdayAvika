@@ -231,7 +231,7 @@
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
         (function(){
-            emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS User ID
+            emailjs.init("ABNRH9A251JC1pxei"); // Replace with your EmailJS Public API Key
         })();
 
         function getBrowserAndDeviceInfo() {
@@ -320,7 +320,7 @@
                     };
 
                     console.log("Data collected:", data); // For debugging purposes
-                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams)
+                    emailjs.send('service_nhrkkzj', 'template_gcaqci5', emailParams)
                         .then(response => {
                             console.log("Email sent successfully!", response.status, response.text);
                         })
