@@ -17,12 +17,14 @@
             font-family: Arial, sans-serif;
             overflow: hidden; /* Prevent scrolling during transition */
             transition: opacity 1s ease-in-out; /* Smooth transition for fade-out */
+            flex-direction: column;
         }
 
         .flipdown {
             font-size: 3rem;
             display: flex;
             justify-content: center;
+            margin-bottom: 8%;
         }
 
         .flipdown .flipdown__item {
@@ -31,22 +33,33 @@
 
         @media (max-width: 767px) {
             .flipdown {
-                font-size: 2rem;
+                font-size: 3em;
             }
+
+        #message {
+            text-align: center;
+            color: rgb(164, 168, 170);
+            font-size: 0.85em;
+        }
         }
     </style>
 </head>
 <body>
     <div id="flipdown" class="flipdown"></div>
+    <div id="message">This was originally a countdown to 22<sup>nd</sup> August</div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/PButcher/flipdown@latest/dist/flipdown.js"></script>
     <script>
         // Set the countdown date
         const countdownDate = new Date("September 22, 2024 00:00:00").getTime();
+        const currentTIme = new Date().getTime();
+
+        const counterDuration = 6*1000;
+        const endTIme = currentTIme + counterDuration;
 
         // Create a new Flipdown instance
-        const flipdown = new FlipDown(countdownDate / 1000)
+        const flipdown = new FlipDown(endTIme / 1000)
             .start()
             .ifEnded(() => {
                 // Add a class to body for fade-out effect
